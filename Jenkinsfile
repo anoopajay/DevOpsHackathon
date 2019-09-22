@@ -82,7 +82,7 @@ def imageBuild(containerName, tag){
 }
 
 def pushToImage(containerName, tag, dockerUser, dockerPassword){
-    sh "docker login 35.245.247.242:8082 -u dockerUser -p dockerPassword"
+    sh "docker login 35.245.247.242:8082 -u $dockerUser -p $dockerPassword"
     sh "docker tag $containerName:$tag 35.245.247.242:8082/$containerName:$tag"
     sh "docker push 35.245.247.242:8082/$containerName:$tag"
     echo "Image push complete"
