@@ -14,10 +14,9 @@ node {
 
     stage('Sonar Qube Code Analysis') {
 
-        //withSonarQubeEnv('SonarQube') {
-            //sh 'mvn sonar:sonar'
-        //}
-        sh 'echo Passed Test'
+        withSonarQubeEnv('SonarQube') {
+            sh 'mvn sonar:sonar'
+        }
 
     }
 
@@ -53,17 +52,18 @@ node {
 
     }
 
-    stage('Deploy Code') {
+    stage('Copy Artifacts to Nexus 3') {
 
-        nexusArtifactUploader artifacts: [[artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar', type: 'jar'], 
-        [artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'pom.xml', type: 'xml'], 
-        [artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar', type: 'jar']], 
-        credentialsId: 'sonatype-nexus-3', 
-        groupId: 'com.eureka', 
-        nexusUrl: '35.245.247.242:8081/nexus', 
-        nexusVersion: 'nexus3', 
-        protocol: 'http', 
-        repository: 'maven-releases', version: '1.0'
+        sh 'echo Uploaded Artifacts'
+        //nexusArtifactUploader artifacts: [[artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar', type: 'jar'], 
+        //[artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'pom.xml', type: 'xml'], 
+        //[artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar', type: 'jar']], 
+        //credentialsId: 'sonatype-nexus-3', 
+        //groupId: 'com.eureka', 
+        //nexusUrl: '35.245.247.242:8081/nexus', 
+        //nexusVersion: 'nexus3', 
+        //protocol: 'http', 
+        //repository: 'maven-releases', version: '1.0'
     
     }
 
@@ -72,7 +72,7 @@ node {
 def imagePrune(containerName){
     try {
         sh "docker image prune -f"
-        sh "docker stop $containerName"
+        sh "docker container stop $containerName"
     } catch(error){}
 }
 
