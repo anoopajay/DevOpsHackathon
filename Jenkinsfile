@@ -46,7 +46,7 @@ node {
 
     }
 
-    stage('Run App'){
+    stage('Run Docker Image'){
 
         runApp(CONTAINER_NAME, CONTAINER_TAG, HTTP_PORT)
 
@@ -54,17 +54,22 @@ node {
 
     stage('Copy Artifacts to Nexus 3') {
 
-        sh 'echo Uploaded Artifacts'
-        //nexusArtifactUploader artifacts: [[artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar', type: 'jar'], 
-        //[artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'pom.xml', type: 'xml'], 
-        //[artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar', type: 'jar']], 
-        //credentialsId: 'sonatype-nexus-3', 
-        //groupId: 'com.eureka', 
-        //nexusUrl: '35.245.247.242:8081/nexus', 
-        //nexusVersion: 'nexus3', 
-        //protocol: 'http', 
-        //repository: 'maven-releases', version: '1.0'
+        nexusArtifactUploader artifacts: [[artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar', type: 'jar'], 
+        [artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'pom.xml', type: 'xml'], 
+        [artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar', type: 'jar']], 
+        credentialsId: 'sonatype-nexus-3', 
+        groupId: 'com.eureka', 
+        nexusUrl: '35.245.247.242:8081/nexus', 
+        nexusVersion: 'nexus3', 
+        protocol: 'http', 
+        repository: 'maven-releases', version: '1.0'
     
+    }
+
+    stage('Kubernetes Deployment') {
+
+        sh 'kubectl run eureka-server --image=35.245.247.242:8082/eureka-server:latest --port=8761'
+
     }
 
 }

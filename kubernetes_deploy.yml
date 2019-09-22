@@ -1,0 +1,30 @@
+apiVersion: v1.0
+kind: Deployment
+metadata:
+  name: eureka-service
+  labels: 
+    run: eureka-service
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: eureka-service
+    spec:
+      containers:
+        - name: eureka-service
+          image: 35.245.247.242:8082/eureka-server
+          ports:
+            - name: http-port
+              containerPort: 8761
+
+kind: Service
+metadata:
+  name: eureka-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8761
+      targetPort: 8761
+  selector:
+    run: eureka-service
