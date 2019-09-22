@@ -82,14 +82,14 @@ def imageBuild(containerName, tag){
 }
 
 def pushToImage(containerName, tag, dockerUser, dockerPassword){
-    sh "docker login $NEXUS3_IP:$NEXUS3_PORT -u $NEXUS3_USERNAME -p $NEXUS3_PASSWORD"
-    sh "docker tag $containerName:$tag $dockerUser/$containerName:$tag"
-    sh "docker push $dockerUser/$containerName:$tag"
+    sh "docker login 35.245.247.242:8082 -u dockerUser -p dockerPassword"
+    sh "docker tag $containerName:$tag 35.245.247.242:8082/$containerName:$tag"
+    sh "docker push 35.245.247.242:8082/$containerName:$tag"
     echo "Image push complete"
 }
 
 def runApp(containerName, tag, httpPort){
-    sh "docker pull $dockerHubUser/$containerName"
+    //sh "docker pull $dockerHubUser/$containerName"
     sh "docker run -d --rm -p $httpPort:$httpPort --name $containerName $dockerHubUser/$containerName:$tag"
     echo "Application started on port: ${httpPort} (http)"
 }
