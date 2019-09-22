@@ -22,8 +22,8 @@ node {
 
     stage('Deploy Code') {
 
-        nexusArtifactUploader artifacts: [[artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'pom.xml', type: 'xml'], 
-        [artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar', type: 'jar'], 
+        nexusArtifactUploader artifacts: [[artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar', type: 'jar'], 
+        [artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'pom.xml', type: 'xml'], 
         [artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar', type: 'jar']], 
         credentialsId: 'sonatype-nexus-3', 
         groupId: 'com.eureka', 
