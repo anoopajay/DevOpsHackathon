@@ -1,19 +1,14 @@
 node {
 
     stage('Initialize') {
-        steps {
-            checkout scm
-        }
+        checkout scm
     }
 
     stage('Build Code') {
-        steps {
-            sh 'mvn clean install'
-        }
+         sh 'mvn clean install'
     }
 
-    stage('Deploy Code'){
-        steps {
+    stage('Deploy Code') {
             nexusArtifactUploader( 
                 credentialsId: 'sonatype-nexus-3', 
                 groupId: 'com.eureka', 
@@ -23,7 +18,6 @@ node {
                 repository: 'maven-snapshots', 
                 version: '1.0'
             )
-        }
     }
 
 }
