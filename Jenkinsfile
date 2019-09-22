@@ -29,8 +29,8 @@ node {
         groupId: 'com.eureka', 
         nexusUrl: '35.221.48.169:8081/nexus', 
         nexusVersion: 'nexus3', 
-        protocol: 'https', 
-        repository: 'maven-snapshots', version: '1.0'
+        protocol: 'http', 
+        repository: 'maven-releases', version: '1.0'
     
     }
 
