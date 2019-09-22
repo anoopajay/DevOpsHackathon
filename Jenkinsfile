@@ -1,7 +1,8 @@
 def CONTAINER_NAME="eureka-server"
 def CONTAINER_TAG="latest"
-def DOCKER_HUB_USER="anoopajay86"
 def HTTP_PORT="8761"
+def NEXUS3_IP="35.245.247.242"
+def NEXUS3_PORT="8082"
 
 node {
 
@@ -38,7 +39,7 @@ node {
 
     }
 
-    stage('Push to Docker Registry'){
+    stage('Push to Nexus Registry'){
 
         withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
@@ -48,7 +49,7 @@ node {
 
     stage('Run App'){
 
-        runApp(CONTAINER_NAME, CONTAINER_TAG, DOCKER_HUB_USER, HTTP_PORT)
+        runApp(CONTAINER_NAME, CONTAINER_TAG, HTTP_PORT)
 
     }
 
@@ -81,13 +82,13 @@ def imageBuild(containerName, tag){
 }
 
 def pushToImage(containerName, tag, dockerUser, dockerPassword){
-    sh "docker login -u $dockerUser -p $dockerPassword"
+    sh "docker login $NEXUS3_IP:$NEXUS3_PORT -u $NEXUS3_USERNAME -p $NEXUS3_PASSWORD"
     sh "docker tag $containerName:$tag $dockerUser/$containerName:$tag"
     sh "docker push $dockerUser/$containerName:$tag"
     echo "Image push complete"
 }
 
-def runApp(containerName, tag, dockerHubUser, httpPort){
+def runApp(containerName, tag, httpPort){
     sh "docker pull $dockerHubUser/$containerName"
     sh "docker run -d --rm -p $httpPort:$httpPort --name $containerName $dockerHubUser/$containerName:$tag"
     echo "Application started on port: ${httpPort} (http)"
