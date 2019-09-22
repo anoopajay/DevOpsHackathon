@@ -21,9 +21,9 @@ node {
     }
 
     stage('Deploy Code') {
-
+        sh 'echo pwd'
         nexusArtifactUploader( 
-            artifacts: [[artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'eureka-server-0.0.1-SNAPSHOT.jar', type: 'jar']], 
+            artifacts: [[artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: '/eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar', type: 'jar']], 
             credentialsId: 'sonatype-nexus-3', 
             groupId: 'com.eureka', 
             nexusUrl: '35.221.48.169:8081/nexus', 
