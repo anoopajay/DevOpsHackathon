@@ -1,0 +1,90 @@
+---
+- name: emove existing docker if installed
+  yum:
+    name:
+       - docker
+       - docker-client
+       - docker-client-latest
+       - docker-common
+       - docker-latest
+       - docker-latest-logrotate
+       - docker-logrotate
+       - docker-engine
+    state: removed
+- name: Install yum utils
+  yum:
+    name: yum-utils
+    state: latest
+
+- name: Install device-mapper-persistent-data
+  yum:
+    name: device-mapper-persistent-data
+    state: latest
+
+- name: Install lvm2
+  yum:
+    name: lvm2
+    state: latest
+
+- name: Add Docker repo
+  get_url:
+   url: https://download.docker.com/linux/centos/docker-ce.repo
+   dest: /etc/yum.repos.d/docer-ce.repo
+  become: yes
+
+- name: Enable Docker Edge repo
+  ini_file:
+    dest: /etc/yum.repos.d/docer-ce.repo
+    section: 'docker-ce-edge'
+    option: enabled
+    value: '0'
+  become: yes
+
+- name: Enable Docker Test repo
+  ini_file:
+    dest: /etc/yum.repos.d/docer-ce.repo
+    section: 'docker-ce-test'
+    option: enabled
+    value: '0'
+  become: yes
+
+- name: Install Docker
+  package:
+   name: docker-ce
+   state: latest
+  become: yes
+
+- name: Start Docker service
+  service:
+   name: docker
+   state: started
+   enabled: yes
+  become: yes
+
+# Install PIP and Docker Compose
+- name: install the latest version of Python-pip
+  yum:
+    name: python-pip
+    state: latest
+
+- name: install the latest version of Docker-compose from pip
+  pip:
+    name: docker-compose
+
+# Create a work directory
+- name: create work directory
+  file:
+    path: /work
+    state: directory
+    mode: '0755'
+
+# Copy Docker Componse file to the host
+- name: Copy nexus3 docker compose file
+  copy:
+   src: ../../../files/docker-compose.yml
+   dest: /work/docker-compose.yml
+
+# Run Docker Compose up and build
+- name: Docker Componse up and build
+  shell: docker-compose -f /work/docker-compose.yml up -d
+  become: yes

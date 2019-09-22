@@ -1,0 +1,148 @@
+---
+
+# Install GIT
+- name: Install git
+  yum: 
+    name: git
+    state: latest
+
+# Install wget
+- name: Install wget
+  yum:
+    name: wget
+    state: present
+
+# Install Java 
+- name: install openjdk
+  yum:
+    name: java-1.8.0-openjdk
+    state: present
+
+# Install Jenkins
+- name: download jenkins.repo
+  get_url:
+    url: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo
+
+- name: import jenkins key
+  rpm_key:
+    state: present
+    key: https://jenkins-ci.org/redhat/jenkins-ci.org.key
+
+- name: install jenkins
+  yum:
+    name: jenkins
+    state: present
+
+- name: enable jenkins
+  systemd:
+    name: jenkins
+    enabled: true
+
+- name: sleep for 30 seconds and continue with play
+  wait_for: timeout=30
+  delegate_to: localhost
+
+- name: init password jenkin
+  shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+  changed_when: false
+  register: result
+
+- name: print init password jenkins
+  debug:
+    var: result.stdout
+
+# Install Maven
+- name: install maven
+  yum:
+    name: maven
+    state: latest
+
+# Install Docker 
+
+- name: Remove existing docker if installed
+  yum:
+    name:
+       - docker
+       - docker-client
+       - docker-client-latest
+       - docker-common
+       - docker-latest
+       - docker-latest-logrotate
+       - docker-logrotate
+       - docker-engine 
+    state: removed 
+
+- name: Install yum utils
+  yum: 
+    name: yum-utils
+    state: latest
+
+- name: Install device-mapper-persistent-data
+  yum: 
+    name: device-mapper-persistent-data
+    state: latest
+
+- name: Install lvm2
+  yum:
+    name: lvm2
+    state: latest
+
+- name: Add Docker repo
+  get_url:
+   url: https://download.docker.com/linux/centos/docker-ce.repo
+   dest: /etc/yum.repos.d/docer-ce.repo
+  become: yes
+
+- name: Enable Docker Edge repo
+  ini_file:
+    dest: /etc/yum.repos.d/docer-ce.repo
+    section: 'docker-ce-edge'
+    option: enabled
+    value: '0'
+  become: yes
+
+- name: Enable Docker Test repo
+  ini_file:
+    dest: /etc/yum.repos.d/docer-ce.repo
+    section: 'docker-ce-test'
+    option: enabled
+    value: '0'
+  become: yes
+
+- name: Install Docker
+  package: 
+   name: docker-ce
+   state: latest
+  become: yes
+
+- name: Start Docker service
+  service: 
+   name: docker
+   state: started
+   enabled: yes
+  become: yes
+
+- name: Add user to docker group
+  user: 
+   name: muthukrishnan_a
+   groups: docker
+   append: yes
+  become: yes
+
+#- name: install Docker
+#  yum:
+#    name: docker
+#    state: latest
+
+# Install PIP and Maven
+- name: install the latest version of Python-pip
+  yum:
+    name: python-pip
+    state: latest
+
+- name: install the latest version of Docker-compose from pip
+  pip:
+    name: docker-compose
+
+

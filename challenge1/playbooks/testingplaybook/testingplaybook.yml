@@ -1,0 +1,16 @@
+---
+- name: Install Devops Common tools
+  hosts: all
+  gather_facts: false
+  become: true
+  pre_tasks: 
+   - name: update Centos OS
+     include: tasks/main.yml
+  tasks:
+   - import_role:
+      name: common
+  post_tasks:
+   - name: update system
+     include: tasks/main.yml
+
+  

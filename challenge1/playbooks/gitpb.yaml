@@ -1,0 +1,8 @@
+
+- hosts: cicd
+  sudo: yes  
+  tasks:
+  - name: Install latest git
+    yum: 
+      name: git
+      state: latest

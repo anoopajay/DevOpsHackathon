@@ -1,0 +1,9 @@
+
+---
+- name: Install Jenkins
+  hosts: cicd
+  gather_facts: false
+  become: true
+  tasks:
+  - import_role:
+      name: jenkins

@@ -1,0 +1,12 @@
+---
+- name: install openjdk
+  yum: 
+    name: java-1.8.0-openjdk
+    state: present
+
+- name: install maven
+  yum: 
+    name: maven
+    state: latest
+
+
