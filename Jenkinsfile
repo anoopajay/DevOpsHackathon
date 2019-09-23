@@ -14,10 +14,9 @@ node {
 
     stage('Sonar Qube Code Analysis') {
 
-        //withSonarQubeEnv('SonarQube') {
-            //sh 'mvn sonar:sonar'
-        //}
-        sh 'echo Sonar scan complete'
+        withSonarQubeEnv('SonarQube') {
+            sh 'mvn sonar:sonar'
+        }
 
     }
 
