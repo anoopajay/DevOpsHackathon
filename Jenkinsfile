@@ -68,13 +68,13 @@ node {
     stage('Kubernetes Deployment') {
 
 
-        gcloud container clusters get-credentials kube-cluster-1 --zone us-east1-b --project starlit-badge-253518
-        kubectl create secret docker-registry regsecret --docker-server=10.150.0.4:8082 --docker-username=admin --docker-password=admin
+        sh 'gcloud container clusters get-credentials kube-cluster-1 --zone us-east1-b --project starlit-badge-253518'
+        sh 'kubectl create secret docker-registry regsecret --docker-server=10.150.0.4:8082 --docker-username=admin --docker-password=admin'
 
-        kubectl delete deployment eureka-server || true
-        kubectl apply -f appdeploy.yaml
-        sleep 200
-        kubectl get services
+        sh 'kubectl delete deployment eureka-server || true'
+        sh 'kubectl apply -f appdeploy.yaml'
+        sh 'sleep 200'
+        sh 'kubectl get services'
 
     }
 
