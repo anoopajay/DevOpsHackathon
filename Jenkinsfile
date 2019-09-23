@@ -72,7 +72,7 @@ node {
         //sh 'kubectl create secret docker-registry regsecret --docker-server=10.150.0.4:8082 --docker-username=admin --docker-password=admin'
 
         sh 'kubectl delete deployment eureka-server || true'
-        sh 'kubectl apply -f appdeploy.yaml'
+        sh 'kubectl apply -f kubernetes_deploy.yml'
         sh 'sleep 200'
         sh 'kubectl get services'
 
