@@ -69,7 +69,7 @@ node {
 
 
         sh 'gcloud container clusters get-credentials kube-cluster-1 --zone us-east1-b --project starlit-badge-253518'
-        sh 'kubectl create secret docker-registry regsecret --docker-server=10.150.0.4:8082 --docker-username=admin --docker-password=admin'
+        //sh 'kubectl create secret docker-registry regsecret --docker-server=10.150.0.4:8082 --docker-username=admin --docker-password=admin'
 
         sh 'kubectl delete deployment eureka-server || true'
         sh 'kubectl apply -f appdeploy.yaml'
