@@ -58,7 +58,7 @@ node {
         [artifactId: 'nexus-artifact-uploader', classifier: 'debug', file: 'eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar', type: 'jar']], 
         credentialsId: 'sonatype-nexus-3', 
         groupId: 'com.eureka', 
-        nexusUrl: '35.245.247.242:8081/nexus', 
+        nexusUrl: '35.245.247.242:8081', 
         nexusVersion: 'nexus3', 
         protocol: 'http', 
         repository: 'maven-releases', version: '1.0'
