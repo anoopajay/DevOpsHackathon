@@ -67,9 +67,20 @@ node {
 
     stage('Kubernetes Deployment') {
 
-        sh 'kubectl run eureka-server --image=35.245.247.242:8082/eureka-server:latest --port=8761'
+        steps {
+
+            gcloud container clusters get-credentials kube-cluster-1 --zone us-east1-b --project starlit-badge-253518
+            kubectl create secret docker-registry regsecret --docker-server=10.150.0.4:8082 --docker-username=admin --docker-password=admin
+
+            kubectl delete deployment eureka-server1 || true
+            kubectl apply -f appdeploy.yaml
+            sleep 200
+            kubectl get services
+           
+        }
 
     }
+
 
 }
 
